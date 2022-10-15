@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import Any
 import numpy as np
 import matplotlib.pyplot as plt
-import re
 import sympy as sym
 
 @dataclass

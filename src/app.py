@@ -15,7 +15,6 @@ def calculate(data):
 def do_operations(json_data, f):
     for idx, i in enumerate(json_data):
         if "results" not in json_data[idx]:
-            print(i["data"])
             fnx_simplified, fnx_beauty = calculate(i["data"])
             
             json_data[idx]["results"] = {
