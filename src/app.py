@@ -6,20 +6,21 @@ from pathlib import Path
 def calculate(data):
     lagrange = Lagrange(data=data)
     lagrange.get_polinomyals()
-    fnx = lagrange.get_px()
-    simplified_fnx = lagrange.get_px_simplified()
-    return fnx, simplified_fnx
+    fnx_simplified = lagrange.get_fnx_simplified()
+    fnx_beauty = lagrange.get_fnx_beauty()
+    
+    return fnx_simplified, fnx_beauty
 
 
 def do_operations(json_data, f):
     for idx, i in enumerate(json_data):
         if "results" not in json_data[idx]:
             print(i["data"])
-            fnx, simplified_fnx = calculate(i["data"])
+            fnx_simplified, fnx_beauty = calculate(i["data"])
             
             json_data[idx]["results"] = {
-                "fn(x)": str(fnx), 
-                "simplified_fn(x)": str(simplified_fnx)
+                "fn(x)": fnx_beauty, 
+                "simplified_fn(x)": str(fnx_simplified)
             }
 
             f.seek(0)

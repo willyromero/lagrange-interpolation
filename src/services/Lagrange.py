@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Any
 import numpy as np
 import matplotlib.pyplot as plt
+import re
 import sympy as sym
 
 @dataclass
@@ -19,9 +20,11 @@ class Lagrange:
     li: Any = 0
 
     # interpolating polynomial p(x) or fn(x)
-    px: Any = 0
+    fnx: Any = 0
 
-    px_simplified: Any = 0
+    fnx_simplified: Any = 0
+
+    fnx_beauty: Any = 0
 
     def __init__(self, data: dict):
         self.data = data
@@ -46,20 +49,26 @@ class Lagrange:
     def get_li(self):
         return self.li
 
-    def set_li(self, li):
+    def set_li(self, li: Any):
         self.li = li
 
-    def get_px(self):
-        return self.px
+    def get_fnx(self):
+        return self.fnx
 
-    def set_px(self, px):
-        self.px = px
+    def set_fnx(self, fnx: Any):
+        self.fnx = fnx
 
-    def get_px_simplified(self):
-        return self.px_simplified
+    def get_fnx_simplified(self):
+        return self.fnx_simplified
 
-    def set_px_simplified(self, px_simplified):
-        self.px_simplified = px_simplified
+    def set_fnx_simplified(self, fnx_simplified):
+        self.fnx_simplified = fnx_simplified
+
+    def get_fnx_beauty(self):
+        return self.fnx_beauty
+
+    def set_fnx_beauty(self, fnx_beauty: Any):
+        self.fnx_beauty = fnx_beauty
     
     
     def show_data_table(self):
@@ -69,7 +78,7 @@ class Lagrange:
     # method for calculate fn(x)
     def get_polinomyals(self):
         divider = np.zeros(self.get_n(), dtype= float)
-        expression = ""
+        polynomial = ""
         # loop for get fn(x) term
         for i in range(0, self.get_n(), 1): 
             numerator, denominator = 1, 1
@@ -79,33 +88,29 @@ class Lagrange:
                 if j != i:
                     numerator = numerator * ( self.x - self.get_data()["xi"][j])
                     denominator = denominator * ( self.get_data()["xi"][i] - self.get_data()["xi"][j])
-            
-            # # create Li(x) = [(x - xj) * ... * (x - xn) / (xi - xj) * ... * (xn - xn)] polynomial
-            # self.set_li(numerator / denominator)
 
-            # # sum Li(x)f(xi)
-            # self.set_px(self.get_px()+(self.get_li()*self.get_data()["fi"][i]))
+            # create Li(x) = [(x - xj) * ... * (x - xn) / (xi - xj) * ... * (xn - xn)] polynomial            
+            self.set_li(numerator/ denominator)
 
-            ##borrar
-
-            expression = f'{expression}+[({self.get_data()["fi"][i]}/{denominator})*{numerator}]'
             # sum Li(x)f(xi)
-            print(expression)
-            self.set_px(self.get_px()+(self.get_data()["fi"][i]/denominator)*numerator)
-            print(str(sym.lambdify(self.x, expression)))
-            # borrar
-            divider[i] = denominator
+            fraction = self.get_data()["fi"][i] / denominator
+            self.set_fnx(self.get_fnx() + (fraction * numerator))
     
-        self.set_px_simplified(self.get_px().expand())
+            polynomial = f'{polynomial} + [ ({self.get_data()["fi"][i]}/{denominator})*{numerator} ]'
+
+            divider[i] = denominator
+
+        self.set_fnx_simplified(self.get_fnx().expand())
+        self.set_fnx_beauty(polynomial)
 
 
     def graph_interpolation(self):
-        px = sym.lambdify(self.x, self.get_px_simplified())
+        fnx = sym.lambdify(self.x, self.get_fnx_simplified())
         samples_number = 101
         a = np.min(self.get_data()["xi"])
         b = np.max(self.get_data()["xi"])
-        pxi = np.linspace(a, b, samples_number)
-        pfi = px(pxi)
+        fnxi = np.linspace(a, b, samples_number)
+        pfi = fnx(fnxi)
 
         plt.plot(
             self.get_data()["xi"], 
@@ -113,7 +118,7 @@ class Lagrange:
             'o', 
             label = 'Points'
         )
-        plt.plot(pxi,pfi, label = 'Polynomial')
+        plt.plot(fnxi,pfi, label = 'Polynomial')
         plt.legend()
 
         plt.xlabel('X')
