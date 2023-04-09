@@ -1,4 +1,4 @@
-# **Lagrange Interpolation.** :eyes
+# **Lagrange Interpolation.** :eyes:
 
 This is a basic solution for solve Lagrange polynomials.
 
@@ -16,7 +16,7 @@ Active virtual environment
 .venv\Scripts\activate
 ```
 
-Install requirements
+Install [requirements](https://github.com/willyromero/lagrange-interpolation/blob/main/requirements.txt)
 
 ```shell
 pip install -r requirements.txt
