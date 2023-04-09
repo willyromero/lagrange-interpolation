@@ -1,8 +1,28 @@
-# **Lagrange Interpolation.** :eyes:
+# **Lagrange Interpolation.** :eyes
 
 This is a basic solution for solve Lagrange polynomials.
 
-## 1. **Instructions.**
+## **Install requirements.**
+
+Open terminal and type
+
+```shell
+virtualenv .venv
+```
+
+Active virtual environment
+
+```shell
+.venv\Scripts\activate
+```
+
+Install requirements
+
+```shell
+pip install -r requirements.txt
+```
+
+## 1. **How to use.**
 
 ---
 
